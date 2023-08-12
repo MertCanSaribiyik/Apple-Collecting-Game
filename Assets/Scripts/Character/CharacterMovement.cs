@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField]
     private TrailRenderer trailEffect;
 
     private float firstPoint, lastPoint;
@@ -31,11 +30,13 @@ public class CharacterMovement : MonoBehaviour
 
         if(transform.position.x <= firstPoint)
         {
+            StartCoroutine(StartStopSpeedEffect()); 
             transform.position = new Vector3(lastPoint, transform.position.y, transform.position.z);
         }
 
         else if(transform.position.x >= lastPoint)
         {
+            StartCoroutine(StartStopSpeedEffect());
             transform.position = new Vector3(firstPoint, transform.position.y, transform.position.z);
         }
 
@@ -60,5 +61,12 @@ public class CharacterMovement : MonoBehaviour
         Character.ch.IsSpeedPot = false;
         takingSpeedPot = false;
         trailEffect.enabled = false;
+    }
+
+    IEnumerator StartStopSpeedEffect()
+    {
+        trailEffect.enabled = false;
+        yield return new WaitForSeconds(0.2f);
+        trailEffect.enabled = true;
     }
 }

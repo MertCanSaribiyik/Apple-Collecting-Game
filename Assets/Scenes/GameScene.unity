@@ -237,7 +237,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 500, y: 150}
+  m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &60553267
 MonoBehaviour:
@@ -506,7 +506,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 500, y: 150}
+  m_SizeDelta: {x: 450, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &222695593
 MonoBehaviour:
@@ -602,6 +602,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 222695591}
   m_CullTransparentMesh: 1
+--- !u!1 &353317717
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 353317719}
+  - component: {fileID: 353317718}
+  m_Layer: 0
+  m_Name: TimeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &353317718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353317717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3bfd874389c1c40a0fa4a18f148eef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 0
+  elapsedTime: 0
+--- !u!4 &353317719
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353317717}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &397566747
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,13 +1792,15 @@ MonoBehaviour:
   enemyPrefabs: {fileID: 828782197534319268, guid: 02c23f9e116ad744dbaaff44f9fb72d1, type: 3}
   healthPotPrefab: {fileID: 950739276612536178, guid: acf28cadb154db344a4cb9cdaa61acbb, type: 3}
   speedPotPrefab: {fileID: 3988956831591529574, guid: 14ffb625201ff0148984d38d9bdb449c, type: 3}
-  meteorRainStartTime: 15
-  meteorFallRange: 25
+  meteorRainStartTime: 20
+  meteorFallRange: 30
   meteorSpacing: 2
   meteorMovement: 1.5
   background: {fileID: 989183131}
   warningImg: {fileID: 955218016}
   pauseMenu: {fileID: 637844565}
+  resumeButton: {fileID: 222695591}
+  buttonText: {fileID: 104684346}
 --- !u!4 &1088792789
 Transform:
   m_ObjectHideFlags: 0
@@ -1816,7 +1864,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c6728332c1e064d9ad4b2a74a9e05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailEffect: {fileID: 0}
 --- !u!4 &1247790060
 Transform:
   m_ObjectHideFlags: 0
@@ -1825,7 +1872,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247790056}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.89, y: 0.64, z: 0}
+  m_LocalPosition: {x: 0.14, y: 0.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6635,7 +6682,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247790056}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

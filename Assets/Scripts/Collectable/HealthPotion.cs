@@ -9,6 +9,7 @@ public class HealthPotion : MonoBehaviour
         if (collision.gameObject.name.Equals("Basket"))
         {
             Character.ch.CurrentHealth = Character.ch.MaxHealth;
+            Character.ch.HealthSliderUpdate();
         }
     }
 }

@@ -14,7 +14,9 @@ public class GameManager : MonoBehaviour
     private Vector3 basketFirstPoint, basketLastPoint;
 
     //Variables for Time for objects to fall : 
-    private float appleAddingTime = 1f, enemyAddingTime = 2f, heathPotAddingTime = 60f, speedPotAddingTime = 45f;
+    private float appleAddingTime = 1.5f, enemyAddingTime = 2.5f, potionAddingTime = 60f;
+    private float appleAddingRange = 1f, enemyAddingRange = 2f, potionAddingRange = 60f;
+    private float potionType;
 
     //Variables for meteor rain : 
     [SerializeField]
@@ -23,13 +25,19 @@ public class GameManager : MonoBehaviour
     private GameObject background, warningImg;
     private bool isMeteorRainActive = false;
     private float meteorRainType = 10;
-    private List<float> List = new List<float>();
+    private List<float> list = new List<float>();       //We keep a list of meteor rains.
     private byte warningCount = 0;
+
+    //Variable for incrase difficult : 
+    private bool isDifficultyIncrased;
 
     //Variables for game pause processing : 
     [SerializeField]
-    private GameObject pauseMenu;
+    private GameObject pauseMenu, resumeButton, buttonText;
     private bool isGamePaused = false;
+
+    //Variable for character dead : 
+    private bool isDead;
 
     private void Awake()
     {
@@ -39,34 +47,56 @@ public class GameManager : MonoBehaviour
         background.SetActive(false);
         warningImg.SetActive(false);
     }
+
     private void Update()
     {
+        TimeManager.instantiate.time = Time.time - TimeManager.instantiate.elapsedTime;
+
         //Game pause :
         GamePause();
+
+        //Incrase Difficult : 
+        if (list.Count % 2 == 0 && list.Count != 0 && !isDifficultyIncrased)
+            IncraseDifficult();
+
+        //Dead :
+        if (!isDead)
+            IsDead();
 
         if (!isMeteorRainActive)
         {
             basketFirstPoint = GameObject.Find("Basket/BasketFirstPoint").transform.position;
             basketLastPoint = GameObject.Find("Basket/BasketLastPoint").transform.position;
 
-            appleAddingTime = AddObject(appleAddingTime, 1f, applePrefabs);      //Oyun baþladýktan 1 saniye sonra her 1 saniyede bir elma oluþacak.
+            //Adding an apple to the scene : 
+            appleAddingTime = AddObject(appleAddingTime, appleAddingRange, applePrefabs);      //Oyun baþladýktan 1 saniye sonra her 1 saniyede bir elma oluþacak.
 
-            enemyAddingTime = AddObject(enemyAddingTime, 2f, enemyPrefabs);
+            //Adding an enemy (meteor) to the scene : 
+            enemyAddingTime = AddObject(enemyAddingTime, enemyAddingRange, enemyPrefabs);
 
-            heathPotAddingTime = AddObject(heathPotAddingTime, 60f, healthPotPrefab);
+            //Adding an potion (health potion or speed potion) to the scene : 
+            if (TimeManager.instantiate.time >= potionAddingTime)
+            {
+                potionType = Mathf.Floor(Random.Range(1f, 3f));     //1 - 2.
+            }
 
-            speedPotAddingTime = AddObject(speedPotAddingTime, 45f, speedPotPrefab);
+            GameObject potion = (potionType == 1) ? healthPotPrefab : speedPotPrefab;
 
+
+            potionAddingTime = AddObject(potionAddingTime, potionAddingRange, potion);
+
+            //Aþaðýdaki deðiþken asla alamayacaðý bir deðere eþitlenerek meteor yaðmurunun belirli bir süre
+            //içinde yalnýzca bir kez oluþmasýna izin verilir. 
             meteorRainType = 10f;
         }
 
 
         //Meteor rain : 
 
-        if (Time.time >= meteorRainStartTime)
+        if (TimeManager.instantiate.time >= meteorRainStartTime)
         {
-            
-            if(warningCount == 0)
+
+            if (warningCount == 0)
             {
                 StartCoroutine(Warning());
                 return;
@@ -74,16 +104,16 @@ public class GameManager : MonoBehaviour
 
             if (meteorRainType == 10f)
             {
-                meteorRainType = Mathf.Floor(Random.Range(1f, 3f));
+                meteorRainType = Mathf.Floor(Random.Range(1f, 3f));         //1 - 2
 
-                if (List.Count > 1)
+                if (list.Count > 1)
                 {
-                    if(List[List.Count - 1] == 1f && List[List.Count - 2] == 1f)
+                    if (list[list.Count - 1] == 1f && list[list.Count - 2] == 1f)
                     {
                         meteorRainType = 2f;
                     }
 
-                    else if(List[List.Count - 1] == 2f && List[List.Count - 2] == 2f)
+                    else if (list[list.Count - 1] == 2f && list[list.Count - 2] == 2f)
                     {
                         meteorRainType = 1f;
                     }
@@ -101,15 +131,16 @@ public class GameManager : MonoBehaviour
             }
 
 
-            meteorRainStartTime = Time.time + meteorFallRange;
-            List.Add(meteorRainType);
+            meteorRainStartTime = TimeManager.instantiate.time + meteorFallRange;
+            list.Add(meteorRainType);
+            isDifficultyIncrased = false;
         }
     }
 
     //Methods for adding objects to the scene : 
     private float AddObject(float nextObjAddingTime, float objAddingRange, GameObject obj)
     {
-        if (Time.time >= nextObjAddingTime)        
+        if (TimeManager.instantiate.time >= nextObjAddingTime)
         {
             if (basketFirstPoint.x <= firstPoint.x)
             {
@@ -124,7 +155,7 @@ public class GameManager : MonoBehaviour
             }
 
             Add(obj, RandomXPositionGenerator(basketFirstPoint.x, basketLastPoint.x));
-            nextObjAddingTime = Time.time + objAddingRange;
+            nextObjAddingTime = TimeManager.instantiate.time + objAddingRange;
         }
 
         return nextObjAddingTime;
@@ -208,7 +239,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 20; i++)
         {
             GameObject enemy = Add(enemyPrefabs, RandomXPositionGenerator(firstPoint.x - meteorMovement / 2, lastPoint.x + meteorMovement / 2));
-            enemy.GetComponent<Rigidbody>().drag = 0.2f;
+            enemy.GetComponent<Rigidbody>().drag = 0.1f;
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -218,12 +249,43 @@ public class GameManager : MonoBehaviour
         warningCount = 0;
     }
 
+    //Methods for incrase difficult : 
+
+    private void IncraseDifficult()
+    {
+        isDifficultyIncrased = true;
+
+        //Incrase potion adding time : 
+        if (potionAddingRange <= 120f)
+            potionAddingRange += 5f;
+
+        //Decrease apple and meteo fall time : 
+        if (appleAddingRange >= 0.5f)
+            appleAddingRange -= 0.1f;
+
+        if (enemyAddingRange >= 1f)
+            enemyAddingRange -= 0.1f;
+
+        //Increase meteor and apple speed : 
+        if (applePrefabs.GetComponent<Rigidbody>().drag >= 0.8f)
+            applePrefabs.GetComponent<Rigidbody>().drag -= 0.1f;
+
+        if (enemyPrefabs.GetComponent<Rigidbody>().drag >= 0.4f)
+            enemyPrefabs.GetComponent<Rigidbody>().drag -= 0.1f;
+
+        //Decrease meteor rain time : 
+        if (meteorFallRange >= 16f)
+            meteorFallRange -= 2f;
+
+    }
+
+
     //Methods for game pause processing : 
     private void GamePause()
     {
-        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
-            if (isGamePaused)   
+            if (isGamePaused)
             {
                 Resume();
             }
@@ -232,7 +294,7 @@ public class GameManager : MonoBehaviour
             {
                 Pause();
             }
-        }   
+        }
     }
 
     public void Resume()
@@ -240,6 +302,11 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         isGamePaused = false;
+
+        if (Character.ch.CurrentHealth <= 0f)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     private void Pause()
@@ -251,7 +318,23 @@ public class GameManager : MonoBehaviour
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);   //Returns to the previous scene.
+        TimeManager.instantiate.elapsedTime = Time.time;
+        SceneOperations.PreviosScene();     //Returns to the previous scene.
     }
 
+    //Method for character dead : 
+
+    private void IsDead()
+    {
+        if (Character.ch.CurrentHealth <= 0f)
+        {
+            isDead = true;
+            resumeButton.GetComponent<RectTransform>().sizeDelta = new Vector2(600f, 150f);
+            buttonText.GetComponent<TMPro.TextMeshProUGUI>().text = "Play Again";
+
+            TimeManager.instantiate.elapsedTime = Time.time;
+
+            Pause();
+        }
+    }
 }

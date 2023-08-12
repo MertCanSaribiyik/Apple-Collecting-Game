@@ -17,12 +17,6 @@ public class Character : MonoBehaviour
         if (ch == null)
         {
             ch = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-
-        else
-        {
-            Destroy(gameObject);
         }
 
         //Initial value assignments for character score variable :
@@ -31,16 +25,10 @@ public class Character : MonoBehaviour
 
         //Initial value assignments for character health variables : 
 
-        slider = GameObject.Find("Canvas/HealthBar").GetComponent<Slider>();
+        healthSlider = GameObject.Find("Canvas/HealthBar").GetComponent<Slider>();
 
-        slider.value = maxHealth;
-        currentHealth = slider.value;
-    }
-
-    private void Update()
-    {
-        SliderUpdate();
-        ScoreUIUpdate();
+        healthSlider.value = maxHealth;
+        currentHealth = healthSlider.value;
     }
 
     //Variables and methods for character movement : 
@@ -70,6 +58,7 @@ public class Character : MonoBehaviour
     public void addScore(float num)
     {
         score += num;
+        ScoreUIUpdate();
     }
 
     public void ScoreUIUpdate()
@@ -86,20 +75,20 @@ public class Character : MonoBehaviour
 
     //Variables and methods for character health :  
 
-    private Slider slider;
+    private Slider healthSlider;
     [SerializeField]
     private float maxHealth;
     private float currentHealth;
 
-    void SliderUpdate()
+    public void HealthSliderUpdate()
     {
-        slider.value = currentHealth;
+        healthSlider.value = currentHealth;
     }
 
     public void takeDamage(float damage)
     {
         currentHealth -= damage;
-        SliderUpdate();
+        HealthSliderUpdate();
     }
 
     //Getters & Setters : 
@@ -107,6 +96,7 @@ public class Character : MonoBehaviour
     public float CurrentHealth
     {
         set { currentHealth = value; }
+        get { return currentHealth; }
     }
 
     public float MaxHealth
