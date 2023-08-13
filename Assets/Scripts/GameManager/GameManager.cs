@@ -46,6 +46,13 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
         background.SetActive(false);
         warningImg.SetActive(false);
+
+        //Initial value assignment to drag values of prefabs : 
+        //Why are we doing this ? Because mass values change as the difficulty increases.
+        applePrefabs.GetComponent<Rigidbody>().drag = 1.5f;
+        enemyPrefabs.GetComponent<Rigidbody>().drag = 0.8f;
+        healthPotPrefab.GetComponent<Rigidbody>().drag = 1.8f;
+        speedPotPrefab.GetComponent<Rigidbody>().drag = 1.8f;
     }
 
     private void Update()
@@ -261,10 +268,10 @@ public class GameManager : MonoBehaviour
 
         //Decrease apple and meteo fall time : 
         if (appleAddingRange >= 0.5f)
-            appleAddingRange -= 0.1f;
+            appleAddingRange -= 0.05f;
 
         if (enemyAddingRange >= 1f)
-            enemyAddingRange -= 0.1f;
+            enemyAddingRange -= 0.05f;
 
         //Increase meteor and apple speed : 
         if (applePrefabs.GetComponent<Rigidbody>().drag >= 0.8f)

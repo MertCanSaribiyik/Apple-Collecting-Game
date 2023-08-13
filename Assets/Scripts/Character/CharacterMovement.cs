@@ -65,8 +65,11 @@ public class CharacterMovement : MonoBehaviour
 
     IEnumerator StartStopSpeedEffect()
     {
-        trailEffect.enabled = false;
-        yield return new WaitForSeconds(0.2f);
-        trailEffect.enabled = true;
+        if(takingSpeedPot)
+        {
+            trailEffect.enabled = false;
+            yield return new WaitForSeconds(0.2f);
+            trailEffect.enabled = true;
+        }
     }
 }

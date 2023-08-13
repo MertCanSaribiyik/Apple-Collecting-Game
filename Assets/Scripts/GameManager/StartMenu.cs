@@ -18,7 +18,7 @@ public class StartMenu : MonoBehaviour
     {
         if(!howPlayGamePanel.activeSelf)
         {
-            HowPlayGameButton();
+            HowToPlayButton();
             return;
         }
 
@@ -26,7 +26,7 @@ public class StartMenu : MonoBehaviour
         SceneOperations.NextScene();
     }
 
-    public void HowPlayGameButton()
+    public void HowToPlayButton()
     {
         startMenuPanel.SetActive(false);
         howPlayGamePanel.SetActive(true);
