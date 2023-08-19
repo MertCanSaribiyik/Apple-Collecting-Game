@@ -18,10 +18,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void Update()
     {
-        if (Character.ch.IsSpeedPot && !takingSpeedPot)
-        {
+        if (Character.ch.IsSpeedPot)
             StartCoroutine(IncraseSpeed());
-        }
     }
 
     private void FixedUpdate()
@@ -30,13 +28,13 @@ public class CharacterMovement : MonoBehaviour
 
         if(transform.position.x <= firstPoint)
         {
-            StartCoroutine(StartStopSpeedEffect()); 
+            StartCoroutine(StopStartSpeedEffect()); 
             transform.position = new Vector3(lastPoint, transform.position.y, transform.position.z);
         }
 
         else if(transform.position.x >= lastPoint)
         {
-            StartCoroutine(StartStopSpeedEffect());
+            StartCoroutine(StopStartSpeedEffect());
             transform.position = new Vector3(firstPoint, transform.position.y, transform.position.z);
         }
 
@@ -51,6 +49,7 @@ public class CharacterMovement : MonoBehaviour
 
     private IEnumerator IncraseSpeed()
     {
+        Character.ch.IsSpeedPot = false;
         takingSpeedPot = true;
         trailEffect.enabled = true;
 
@@ -58,12 +57,11 @@ public class CharacterMovement : MonoBehaviour
         yield return new WaitForSeconds(5f);
         Character.ch.Speed /= 2;
 
-        Character.ch.IsSpeedPot = false;
         takingSpeedPot = false;
         trailEffect.enabled = false;
     }
 
-    IEnumerator StartStopSpeedEffect()
+    IEnumerator StopStartSpeedEffect()
     {
         if(takingSpeedPot)
         {

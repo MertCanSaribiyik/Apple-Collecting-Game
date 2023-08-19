@@ -22,6 +22,11 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        time = Time.time - elapsedTime;
+    }
+
 
     public float time, elapsedTime;
 }

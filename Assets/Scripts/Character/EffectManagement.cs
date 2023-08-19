@@ -15,14 +15,7 @@ public class EffectManagement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Enemy"))
-            color = Color.red;
-
-        else if(collision.gameObject.CompareTag("Apple"))
-            color = Color.green;
-
-        else if(collision.gameObject.CompareTag("Potion"))
-            color = Color.blue;
+        color = (collision.gameObject.CompareTag("Enemy")) ? Color.red : Color.green;
 
         StartCoroutine(playStopEffect());
     }

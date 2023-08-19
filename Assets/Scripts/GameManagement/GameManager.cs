@@ -20,11 +20,11 @@ public class GameManager : MonoBehaviour
 
     //Variables for meteor rain : 
     [SerializeField]
-    private float meteorRainStartTime, meteorFallRange, meteorSpacing, meteorMovement;
+    private float meteorRainStartTime, meteorRainAddingRange, meteorSpacing, meteorMovement;
     [SerializeField]
     private GameObject background, warningImg;
     private bool isMeteorRainActive = false;
-    private float meteorRainType = 10;
+    private float meteorRainType = 10, meteorRainTimeRange = 0.3f;
     private List<float> list = new List<float>();       //We keep a list of meteor rains.
     private byte warningCount = 0;
 
@@ -48,7 +48,8 @@ public class GameManager : MonoBehaviour
         warningImg.SetActive(false);
 
         //Initial value assignment to drag values of prefabs : 
-        //Why are we doing this ? Because mass values change as the difficulty increases.
+        //Why are we doing this ?
+        //Because mass values change as the difficulty increases, so Mass values are set by default every time the game starts.
         applePrefabs.GetComponent<Rigidbody>().drag = 1.5f;
         enemyPrefabs.GetComponent<Rigidbody>().drag = 0.8f;
         healthPotPrefab.GetComponent<Rigidbody>().drag = 1.8f;
@@ -57,8 +58,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        TimeManager.instantiate.time = Time.time - TimeManager.instantiate.elapsedTime;
-
         //Game pause :
         GamePause();
 
@@ -138,7 +137,7 @@ public class GameManager : MonoBehaviour
             }
 
 
-            meteorRainStartTime = TimeManager.instantiate.time + meteorFallRange;
+            meteorRainStartTime = TimeManager.instantiate.time + meteorRainAddingRange;
             list.Add(meteorRainType);
             isDifficultyIncrased = false;
         }
@@ -150,16 +149,10 @@ public class GameManager : MonoBehaviour
         if (TimeManager.instantiate.time >= nextObjAddingTime)
         {
             if (basketFirstPoint.x <= firstPoint.x)
-            {
-                basketLastPoint.x += Mathf.Abs(firstPoint.x - basketFirstPoint.x);
                 basketFirstPoint.x = firstPoint.x;
-            }
 
             else if (basketLastPoint.x >= lastPoint.x)
-            {
-                basketFirstPoint.x -= Mathf.Abs(lastPoint.x - basketLastPoint.x);
                 basketLastPoint.x = lastPoint.x;
-            }
 
             Add(obj, RandomXPositionGenerator(basketFirstPoint.x, basketLastPoint.x));
             nextObjAddingTime = TimeManager.instantiate.time + objAddingRange;
@@ -247,7 +240,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject enemy = Add(enemyPrefabs, RandomXPositionGenerator(firstPoint.x - meteorMovement / 2, lastPoint.x + meteorMovement / 2));
             enemy.GetComponent<Rigidbody>().drag = 0.1f;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(meteorRainTimeRange);
         }
 
         yield return new WaitForSeconds(1.5f);
@@ -281,8 +274,12 @@ public class GameManager : MonoBehaviour
             enemyPrefabs.GetComponent<Rigidbody>().drag -= 0.1f;
 
         //Decrease meteor rain time : 
-        if (meteorFallRange >= 16f)
-            meteorFallRange -= 2f;
+        if (meteorRainAddingRange >= 16f)
+            meteorRainAddingRange -= 2f;
+
+        //Decrease the time range for the second meteor shower : 
+        if (meteorRainTimeRange >= 0.15f)
+            meteorRainTimeRange -= 0.05f;
 
     }
 
@@ -312,7 +309,7 @@ public class GameManager : MonoBehaviour
 
         if (Character.ch.CurrentHealth <= 0f)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneOperations.ReloadScene();
         }
     }
 
@@ -325,7 +322,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadMenu()
     {
-        TimeManager.instantiate.elapsedTime = Time.time;
+        Time.timeScale = 1f;
         SceneOperations.PreviosScene();     //Returns to the previous scene.
     }
 
@@ -338,9 +335,6 @@ public class GameManager : MonoBehaviour
             isDead = true;
             resumeButton.GetComponent<RectTransform>().sizeDelta = new Vector2(600f, 150f);
             buttonText.GetComponent<TMPro.TextMeshProUGUI>().text = "Play Again";
-
-            TimeManager.instantiate.elapsedTime = Time.time;
-
             Pause();
         }
     }

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2565575755168864691}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Manzana
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 2565575755168864693}
   - component: {fileID: 2565575755165964699}
   - component: {fileID: 2565575755166964571}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Manzana_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2565575755168864657}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Polygon_Reduction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 841551219064915267}
   - component: {fileID: 2256672276424763719}
   - component: {fileID: 8964251585167542769}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Apple
   m_TagString: Apple
   m_Icon: {fileID: 0}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7455177493622552085}
   - component: {fileID: 4908684277885490556}
   - component: {fileID: 8702451793498564247}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpeedPotion
   m_TagString: Potion
   m_Icon: {fileID: 0}

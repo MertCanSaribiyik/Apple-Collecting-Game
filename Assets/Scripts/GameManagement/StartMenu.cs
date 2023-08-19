@@ -9,7 +9,6 @@ public class StartMenu : MonoBehaviour
 
     private void Awake()
     {
-        Time.timeScale = 0f;
         startMenuPanel.SetActive(true);
         howPlayGamePanel.SetActive(false);
     }
@@ -22,7 +21,6 @@ public class StartMenu : MonoBehaviour
             return;
         }
 
-        Time.timeScale = 1f;
         SceneOperations.NextScene();
     }
 

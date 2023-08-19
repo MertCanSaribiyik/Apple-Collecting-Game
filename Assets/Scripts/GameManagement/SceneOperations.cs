@@ -8,16 +8,19 @@ public class SceneOperations
 {
     public static void NextScene()
     {
+        TimeManager.instantiate.elapsedTime = Time.time;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public static void PreviosScene()
     {
+        TimeManager.instantiate.elapsedTime = Time.time;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
     public static void ReloadScene()
     {
+        TimeManager.instantiate.elapsedTime = Time.time;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
