@@ -22,6 +22,9 @@ public class Character : MonoBehaviour
         //Initial value assignments for character score variable :
 
         scoreUI = GameObject.Find("Canvas/ScoreText").GetComponent<TMPro.TextMeshProUGUI>();
+        highScoreUI = GameObject.Find("Canvas/HighScoreText").GetComponent<TMPro.TextMeshProUGUI>();
+
+        highScoreUI.text = "High Score : " + PlayerPrefs.GetFloat("highScore", 0).ToString();
 
         //Initial value assignments for character health variables : 
 
@@ -54,6 +57,7 @@ public class Character : MonoBehaviour
 
     private float score = 0f;
     private TMPro.TextMeshProUGUI scoreUI;
+    private TMPro.TextMeshProUGUI highScoreUI;
 
     public void addScore(float num)
     {
@@ -71,6 +75,7 @@ public class Character : MonoBehaviour
     public float Score
     {
         set { score = value; }
+        get { return score; }
     }
 
     //Variables and methods for character health :  

@@ -7,6 +7,8 @@ public class AppleDamage : MonoBehaviour
     [SerializeField]
     private float appleDamage;
 
+    public AudioClip clip;
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -17,6 +19,7 @@ public class AppleDamage : MonoBehaviour
 
         else if(collision.gameObject.name.Equals("Basket"))
         {
+            AudioManager.PlayOneShotSound(clip);
             Character.ch.addScore(10);
         }
     }

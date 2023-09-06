@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -154,7 +153,8 @@ public class GameManager : MonoBehaviour
             else if (basketLastPoint.x >= lastPoint.x)
                 basketLastPoint.x = lastPoint.x;
 
-            Add(obj, RandomXPositionGenerator(basketFirstPoint.x, basketLastPoint.x));
+           Add(obj, RandomXPositionGenerator(basketFirstPoint.x, basketLastPoint.x));
+
             nextObjAddingTime = TimeManager.instantiate.time + objAddingRange;
         }
 
@@ -232,11 +232,13 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SecondMeteorRain()
     {
+        float time = TimeManager.instantiate.time + 5f;
+
         isMeteorRainActive = true;
         background.SetActive(true);
         yield return new WaitForSeconds(0.5f);
 
-        for (int i = 0; i < 20; i++)
+        while (TimeManager.instantiate.time <= time)
         {
             GameObject enemy = Add(enemyPrefabs, RandomXPositionGenerator(firstPoint.x - meteorMovement / 2, lastPoint.x + meteorMovement / 2));
             enemy.GetComponent<Rigidbody>().drag = 0.1f;
@@ -261,10 +263,10 @@ public class GameManager : MonoBehaviour
 
         //Decrease apple and meteo fall time : 
         if (appleAddingRange >= 0.5f)
-            appleAddingRange -= 0.05f;
+            appleAddingRange -= 0.1f;
 
         if (enemyAddingRange >= 1f)
-            enemyAddingRange -= 0.05f;
+            enemyAddingRange -= 0.1f;
 
         //Increase meteor and apple speed : 
         if (applePrefabs.GetComponent<Rigidbody>().drag >= 0.8f)
@@ -277,9 +279,9 @@ public class GameManager : MonoBehaviour
         if (meteorRainAddingRange >= 16f)
             meteorRainAddingRange -= 2f;
 
-        //Decrease the time range for the second meteor shower : 
+        //Decrease the time range for the second meteor rain : 
         if (meteorRainTimeRange >= 0.15f)
-            meteorRainTimeRange -= 0.05f;
+            meteorRainTimeRange -= 0.025f;
 
     }
 
@@ -335,6 +337,12 @@ public class GameManager : MonoBehaviour
             isDead = true;
             resumeButton.GetComponent<RectTransform>().sizeDelta = new Vector2(600f, 150f);
             buttonText.GetComponent<TMPro.TextMeshProUGUI>().text = "Play Again";
+
+            if(PlayerPrefs.GetFloat("highScore", 0) < Character.ch.Score)
+            {
+                PlayerPrefs.SetFloat("highScore", Character.ch.Score);
+            }
+
             Pause();
         }
     }

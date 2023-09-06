@@ -237,3 +237,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   appleDamage: 5
+  clip: {fileID: 8300000, guid: 40d145dd1bc009742ad4d56eb480add6, type: 3}

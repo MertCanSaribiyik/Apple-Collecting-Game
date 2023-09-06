@@ -4839,6 +4839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyDamage: 20
+  clip: {fileID: 8300000, guid: 397b2bc1c79388d4b872640ae6193123, type: 3}
 --- !u!199 &828782197534319292
 ParticleSystemRenderer:
   serializedVersion: 6
